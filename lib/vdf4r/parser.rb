@@ -10,7 +10,8 @@ module VDF4R
   class Parser
     class << self
       def clean(input)
-        input.gsub(/\\"/, '&quot;')
+        input = input.gsub('\\\\', '&#92;')
+        input.gsub('\\"', '&quot;')
       end
 
       def dirty(input)
@@ -38,7 +39,6 @@ module VDF4R
 
       @input.each_with_index do |line, index|
         node = parser.parse(Parser.clean(line))
-
         if node.nil?
           raise "ungrammatical content at line #{index+1}: '#{line}'" if node.nil?
         end
@@ -46,7 +46,7 @@ module VDF4R
         begin
           _, (encounter, context) = node.value
         rescue NoMethodError => e
-          
+
         end
 
         case encounter
